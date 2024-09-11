@@ -1,7 +1,7 @@
 name: Demo 05 - Pull Request
 
 on:
-  pull_request:
+  push:
     branches: 
       - main
   workflow_dispatch:
@@ -58,12 +58,13 @@ jobs:
         if-no-files-found: error
         # Duration after which artifact will expire in days. 0 means using default retention.
         retention-days: 90
+
     - name: Install Trivy
       run: |
-          Invoke-WebRequest -Uri https://github.com/aquasecurity/trivy/releases/download/v0.40.0/trivy_0.40.0_Windows-64bit.zip -OutFile trivy.zip
-          Expand-Archive -Path trivy.zip -DestinationPath trivy
-          trivy\trivy.exe --version
+          sudo apt-get install wget -y
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.40.0/trivy_0.40.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.40.0_Linux-64bit.deb
   
     - name: Scan with Trivy
       run: |
-          trivy\trivy.exe fs --exit-code 1 --severity HIGH,CRITICAL mywebapp
+          trivy fs --exit-code 1 --severity HIGH,CRITICAL mywebapp

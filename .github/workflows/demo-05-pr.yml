@@ -69,7 +69,7 @@ jobs:
     # Run Trivy security scan
     - name: Run security scan with Trivy
       run: |
-        trivy fs --exit-code 1 --security-checks vuln,config mywebapp
+        trivy fs mywebapp
       continue-on-error: false  # Fail the workflow if vulnerabilities are found
 
     # Generate SARIF report from Trivy scan

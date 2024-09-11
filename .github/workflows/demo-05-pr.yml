@@ -69,13 +69,13 @@ jobs:
     # Run Trivy security scan
     - name: Run security scan with Trivy
       run: |
-        trivy fs mywebapp
+        trivy fs --scanners vuln,secret,misconfig mywebapp
       continue-on-error: false  # Fail the workflow if vulnerabilities are found
 
     # Generate SARIF report from Trivy scan
     - name: Generate SARIF report from Trivy scan
       run: |
-        trivy fs --format sarif --output trivy-results.sarif mywebapp
+        trivy fs --scanners vuln,secret,misconfig --format sarif --output trivy-results.sarif mywebapp
 
     # Upload SARIF file for security results
     - name: Upload Trivy scan results

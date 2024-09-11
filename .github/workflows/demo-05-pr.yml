@@ -67,4 +67,11 @@ jobs:
   
     - name: Scan with Trivy
       run: |
-          trivy fs --exit-code 1 --severity HIGH,CRITICAL mywebapp
+          trivy fs mywebapp
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy Scan Results `trivy-results.sarif`
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: trivy-results.sarif

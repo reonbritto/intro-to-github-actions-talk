@@ -63,7 +63,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install wget -y
         wget https://github.com/aquasecurity/trivy/releases/download/v0.55.0/trivy_0.55.0_Linux-64bit.deb
-        sudo dpkg -i trivy_0.40.0_Linux-64bit.deb
+        sudo dpkg -i trivy_0.55.0_Linux-64bit.deb
       continue-on-error: false  # Fail the workflow if Trivy installation fails
 
     # Run Trivy security scan

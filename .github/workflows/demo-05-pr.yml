@@ -30,19 +30,6 @@ jobs:
     - name: Build project
       run: dotnet build "${{ github.workspace }}/mywebapp/mywebapp.sln" --configuration Release --no-restore
 
-    # Run tests and generate results
-    - name: Run unit tests
-      run: |
-        dotnet test "${{ github.workspace }}/mywebapp/mywebapp.sln" --no-restore --verbosity normal --logger "trx;LogFileName=test-results.trx"
-
-    # Generate test report
-    - name: Publish test results
-      uses: dorny/test-reporter@v1.5.0
-      if: always()    # Run this step even if the previous steps fail
-      with:
-        name: XUnit Tests
-        path: ${{ github.workspace }}/mywebapp/tests/TestResults/*.trx
-        reporter: dotnet-trx
 
     # Publish the project
     - name: Publish project

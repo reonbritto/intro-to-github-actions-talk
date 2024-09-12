@@ -1,7 +1,7 @@
 name: Demo 05 - Pull Request
 
 on:
-  pull_request:
+  push:
     branches: 
       - main
   workflow_dispatch:
@@ -44,29 +44,22 @@ jobs:
         if-no-files-found: error
         retention-days: 90
 
-    # Install Trivy for security scanning
-    - name: Install Trivy
-      run: |
-        sudo apt-get update
-        sudo apt-get install wget -y
-        wget https://github.com/aquasecurity/trivy/releases/download/v0.55.0/trivy_0.55.0_Linux-64bit.deb
-        sudo dpkg -i trivy_0.55.0_Linux-64bit.deb
-      continue-on-error: false  # Fail the workflow if Trivy installation fails
-
     # Run Trivy security scan
     - name: Run security scan with Trivy
       run: |
         trivy fs --scanners vuln,secret,misconfig mywebapp
       continue-on-error: false  # Fail the workflow if vulnerabilities are found
 
-    # Generate SARIF report from Trivy scan
-    - name: Generate SARIF report from Trivy scan
-      run: |
-        trivy fs --scanners vuln,secret,misconfig --format sarif --output trivy-results.sarif mywebapp
-
-    # Upload SARIF file for security results
-    - name: Upload Trivy scan results
-      uses: github/codeql-action/upload-sarif@v1
+    - uses: snyk/actions/setup@master
+      id: snyk
       with:
-        sarif_file: trivy-results.sarif
-      continue-on-error: false  # Fail the workflow if SARIF upload fails
+        snyk-version: v1.391.0
+    - uses: actions/setup-go@v1
+      with:
+        go-version: "1.13"
+    - name: Snyk version
+      run: echo "${{ steps.snyk.outputs.version }}"
+    - name: Snyk monitor 
+      run: snyk monitor
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

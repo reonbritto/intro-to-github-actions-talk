@@ -44,12 +44,6 @@ jobs:
         if-no-files-found: error
         retention-days: 90
 
-    # Run Trivy security scan
-    - name: Run security scan with Trivy
-      run: |
-        trivy fs --scanners vuln,secret,misconfig mywebapp
-      continue-on-error: false  # Fail the workflow if vulnerabilities are found
-
     - uses: snyk/actions/setup@master
       id: snyk
       with:

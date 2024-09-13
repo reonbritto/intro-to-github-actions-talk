@@ -43,6 +43,7 @@ jobs:
         path: mywebapp/**
         if-no-files-found: error
         retention-days: 90
+    - uses: actions/checkout@master
     - name: Run Snyk to check for vulnerabilities
       uses: snyk/actions/dotnet@master
       env:
